@@ -1,0 +1,9 @@
+{
+  "Manufacturer": "Siemens",
+  "ManufacturersModelName": "Terra",
+  "ProcedureStepDescription": "Montreal Paris Neurobanque",
+  "BodyPartExamined": "BRAIN",
+  "MagneticFieldStrength": 7.0,
+  "TaskName": "TASK_NAME",
+  "Instructions": "eyes closed"
+}

@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mpn_dicom_to_bids"
+version = "0.0.0"
+readme = "README.md"
+dependencies = [
+    "bic_util",
+    "pydicom",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pyright",
+    "ruff",
+]
+
+[project.scripts]
+mpn_dicom_to_bids = "mpn_dicom_to_bids.scripts.mpn_dicom_to_bids:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/mpn_dicom_to_bids"]
+
+[tool.pyright]
+include = ["src"]
+strict = ["src"]
+
+[tool.ruff]
+include = ["src/**/*.py"]
+line-length = 120
+preview = true
+
+[tool.ruff.lint]
+ignore = ["E203", "E221", "E241", "E251"]
+select = ["E", "F", "I", "N", "UP", "W"]
