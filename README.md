@@ -13,7 +13,7 @@ pip install git+https://github.com/BIC-MNI/BIC_MRI_pipeline_util.git
 pip install git+https://github.com/BIC-MNI/MPN_DICOM_to_BIDS.git
 ```
 
-You must also have (https://github.com/rordenlab/dcm2niix)[dcm2niix] (preferably a more recent version) installed on your machine.
+You must also have [dcm2niix](https://github.com/rordenlab/dcm2niix) (preferably a more recent version) installed on your machine.
 
 ## Docker
 
