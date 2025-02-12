@@ -9,8 +9,8 @@ This project contains the Montreal Paris NeuroBank DICOM to BIDS converter.
 To install the project with PIP, install the following packages in the relevant Python environment:
 
 ```
-pip install git+https://github.com/BIC-MNI/BIC_MRI_pipeline_util.git
-pip install git+https://github.com/BIC-MNI/MPN_DICOM_to_BIDS.git
+pip install git+https://github.com/BIC-MNI/BIC_MRI_pipeline_util
+pip install git+https://github.com/BIC-MNI/MPN_DICOM_to_BIDS
 ```
 
 You must also have [dcm2niix](https://github.com/rordenlab/dcm2niix) (preferably a more recent version) installed on your machine.
@@ -20,7 +20,7 @@ You must also have [dcm2niix](https://github.com/rordenlab/dcm2niix) (preferably
 To install the projet with Docker, clone the GitHub repository and run the Docker builder:
 
 ```
-git clone https://github.com/BIC-MNI/MPN_DICOM_to_BIDS.git mpn_dicom_to_bids
+git clone https://github.com/BIC-MNI/MPN_DICOM_to_BIDS mpn_dicom_to_bids
 docker build mpn_dicom_to_bids -t mpn_dicom_to_bids
 ```
 
