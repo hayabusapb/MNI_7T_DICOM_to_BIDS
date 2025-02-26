@@ -1,7 +1,7 @@
 import os
 
 import pydicom
-from bic_util.fs import get_dir_files_count
+from bic_util.fs import count_dir_files
 from bic_util.print import get_progress_printer
 from bic_util.util import find
 
@@ -14,7 +14,7 @@ def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
     series number.
     """
 
-    files_count = get_dir_files_count(dicom_dir_path)
+    files_count = count_dir_files(dicom_dir_path)
 
     progress = get_progress_printer(files_count)
 
