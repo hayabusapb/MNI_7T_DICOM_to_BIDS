@@ -28,8 +28,16 @@ bids_dicom_mappings: dict[str, dict[str, list[str] | str]] = {
             'sensitivity_corrected_mag_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         ],
         # MP2RAGE
-        'inv-1_MP2RAGE': 'anat-T1w_acq-mp2rage_0.7mm_CSptx_INV1',
-        'inv-2_MP2RAGE': 'anat-T1w_acq-mp2rage_0.7mm_CSptx_INV2',
+        'inv-1_MP2RAGE': [
+            'anat-T1w_acq-mp2rage_0.7mm_CSptx_INV1',
+            'anat-T1w_acq-mp2rage_05mm_UP_INV1',
+        ],
+        'inv-2_MP2RAGE': [
+            'anat-T1w_acq-mp2rage_0.7mm_CSptx_INV2',
+            'anat-T1w_acq-mp2rage_05mm_UP_INV2',
+        ],
+        'acq-T1_MP2RAGE': 'anat-T1w_acq-mp2rage_05mm_UP_T1_Images',
+        'acq-UNI_MP2RAGE': 'anat-T1w_acq-mp2rage_05mm_UP_UNI_Images',
         # MTW
         'acq-mtw_T1w'        : 'anat-mtw_acq-T1w_07mm',
         'acq-mtw_mt-on_MTR'  : 'anat-mtw_acq-MTON_07mm',
