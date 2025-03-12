@@ -21,7 +21,7 @@ def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
     dicom_series_entries: list[DicomSeriesInfo] = []
 
     for dicom_file in os.scandir(dicom_dir_path):
-        progress()
+        next(progress)
 
         dicom = pydicom.dcmread(dicom_file.path)  # type: ignore
 
