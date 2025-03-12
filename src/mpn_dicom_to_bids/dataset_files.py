@@ -169,12 +169,6 @@ def _resolve_asset_file_path(file_name: str) -> Traversable:
     rel_file_path = os.path.join('assets', file_name)
     return files('mpn_dicom_to_bids').joinpath(rel_file_path)
 
-    assets_dir_path = os.environ.get('ASSETSPATH')
-    if assets_dir_path is None:
-        print_error_exit('Could not find the MPN DICOM to BIDS static assets directory path.')
-
-    return assets_dir_path
-
 
 def _count_nifti_files(bids_scan_dir_path: str) -> int:
     """
