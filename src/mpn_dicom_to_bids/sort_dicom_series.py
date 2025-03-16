@@ -1,7 +1,7 @@
 import os
 
 import pydicom
-from bic_util.fs import count_dir_files
+from bic_util.fs import count_all_dir_files, iter_all_dir_files
 from bic_util.print import get_progress_printer
 from bic_util.util import find
 
@@ -14,16 +14,18 @@ def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
     series number.
     """
 
-    files_count = count_dir_files(dicom_dir_path)
+    files_count = count_all_dir_files(dicom_dir_path)
 
     progress = get_progress_printer(files_count)
 
     dicom_series_entries: list[DicomSeriesInfo] = []
 
-    for dicom_file in os.scandir(dicom_dir_path):
+    for dicom_file_rel_path in iter_all_dir_files(dicom_dir_path):
         next(progress)
 
-        dicom = pydicom.dcmread(dicom_file.path)  # type: ignore
+        dicom_file_path = os.path.join(dicom_dir_path, dicom_file_rel_path)
+
+        dicom = pydicom.dcmread(dicom_file_path)  # type: ignore
 
         dicom_series = find(
             lambda dicom_series: (
@@ -42,7 +44,7 @@ def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
 
             dicom_series_entries.append(dicom_series)
 
-        dicom_series.file_paths.append(dicom_file.path)
+        dicom_series.file_paths.append(dicom_file_path)
 
         # TODO: Handle session numbers.
 
