@@ -27,17 +27,14 @@ bids_dicom_mappings: dict[str, dict[str, list[str] | str]] = {
         'acq-aspire_desc-echoCombinedSensitivityCorrected_T2starw': [
             'sensitivity_corrected_mag_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         ],
-        # MP2RAGE
-        'inv-1_MP2RAGE': [
-            'anat-T1w_acq-mp2rage_0.7mm_CSptx_INV1',
-            'anat-T1w_acq-mp2rage_05mm_UP_INV1',
-        ],
-        'inv-2_MP2RAGE': [
-            'anat-T1w_acq-mp2rage_0.7mm_CSptx_INV2',
-            'anat-T1w_acq-mp2rage_05mm_UP_INV2',
-        ],
-        'acq-T1_MP2RAGE': 'anat-T1w_acq-mp2rage_05mm_UP_T1_Images',
-        'acq-UNI_MP2RAGE': 'anat-T1w_acq-mp2rage_05mm_UP_UNI_Images',
+        # 0.7mm MP2RAGE
+        'inv-1_MP2RAGE': 'anat-T1w_acq-mp2rage_0.7mm_CSptx_INV1',
+        'inv-2_MP2RAGE': 'anat-T1w_acq-mp2rage_0.7mm_CSptx_INV2',
+        # 0.5mm MP2RAGE
+        'acq-05mm_inv-1_MP2RAGE': 'anat-T1w_acq-mp2rage_05mm_UP_INV1',
+        'acq-05mm_inv-2_MP2RAGE': 'anat-T1w_acq-mp2rage_05mm_UP_INV2',
+        'acq-05mm_T1map': 'anat-T1w_acq-mp2rage_05mm_UP_T1_Images',
+        'acq-05mm_UNIT1': 'anat-T1w_acq-mp2rage_05mm_UP_UNI_Images',
         # MTW
         'acq-mtw_T1w'        : 'anat-mtw_acq-T1w_07mm',
         'acq-mtw_mt-on_MTR'  : 'anat-mtw_acq-MTON_07mm',
