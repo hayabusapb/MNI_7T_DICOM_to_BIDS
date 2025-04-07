@@ -6,6 +6,7 @@ build-backend = "hatchling.build"
 name = "mpn_dicom_to_bids"
 version = "0.0.0"
 readme = "README.md"
+requires-python = ">= 3.11"
 dependencies = [
     "bic_util",
     "pydicom",
