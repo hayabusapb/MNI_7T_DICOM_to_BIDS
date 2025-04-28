@@ -88,6 +88,7 @@ bids_dicom_ignores: list[str] = [
     'AAHead_Scout_32ch-head-coil_MPR_sag',
     'AAHead_Scout_32ch-head-coil_MPR_tra',
     'AAHead_Scout_32ch-head-coil_MPR_cor',
+    'ADD_RUN1-4',
     'PhoenixZIPReport',
 ]
 
