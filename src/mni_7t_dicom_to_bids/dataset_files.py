@@ -8,7 +8,7 @@ from importlib.resources import as_file, files
 
 from bic_util.print import print_error_exit, print_warning
 
-from mpn_dicom_to_bids.dataclass import BidsDirInfo
+from mni_7t_dicom_to_bids.dataclass import BidsDirInfo
 
 
 def add_dataset_files(bids_dir: BidsDirInfo, input_dicom_dir_path: str, overwrite: bool):
@@ -167,7 +167,7 @@ def _resolve_asset_file_path(file_name: str) -> Traversable:
     """
 
     rel_file_path = os.path.join('assets', file_name)
-    return files('mpn_dicom_to_bids').joinpath(rel_file_path)
+    return files('mni_7t_dicom_to_bids').joinpath(rel_file_path)
 
 
 def _count_nifti_files(bids_scan_dir_path: str) -> int:

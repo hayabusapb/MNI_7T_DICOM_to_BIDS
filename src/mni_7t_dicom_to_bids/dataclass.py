@@ -3,7 +3,7 @@ import re
 from dataclasses import dataclass
 from re import Match, Pattern
 
-from mpn_dicom_to_bids.variables import bids_label_order
+from mni_7t_dicom_to_bids.variables import bids_label_order
 
 
 @dataclass

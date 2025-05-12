@@ -5,7 +5,7 @@ from bic_util.fs import count_all_dir_files, iter_all_dir_files
 from bic_util.print import get_progress_printer
 from bic_util.util import find
 
-from mpn_dicom_to_bids.dataclass import DicomSeriesInfo
+from mni_7t_dicom_to_bids.dataclass import DicomSeriesInfo
 
 
 def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:

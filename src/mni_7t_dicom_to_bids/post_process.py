@@ -5,7 +5,7 @@ from pathlib import Path
 
 from bic_util.fs import rename_file
 
-from mpn_dicom_to_bids.dataclass import BidsName
+from mni_7t_dicom_to_bids.dataclass import BidsName
 
 
 def post_process(acquisition_path: str):
@@ -18,7 +18,7 @@ def post_process(acquisition_path: str):
 
 def post_process_file(file_path: str):
     """
-    Apply MPN BIDS post processing.
+    Apply MNI 7T BIDS post processing.
     """
 
     file_name = os.path.basename(file_path)

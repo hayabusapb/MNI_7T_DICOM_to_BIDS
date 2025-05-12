@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mpn_dicom_to_bids"
+name = "mni_7t_dicom_to_bids"
 version = "0.0.0"
 readme = "README.md"
 requires-python = ">= 3.11"
@@ -14,15 +14,16 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    "pyinstaller",
     "pyright",
     "ruff",
 ]
 
 [project.scripts]
-mpn_dicom_to_bids = "mpn_dicom_to_bids.scripts.mpn_dicom_to_bids:main"
+mni_7t_dicom_to_bids = "mni_7t_dicom_to_bids.scripts.run_mni_7t_dicom_to_bids:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/mpn_dicom_to_bids"]
+packages = ["src/mni_7t_dicom_to_bids"]
 
 [tool.pyright]
 include = ["src"]

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from bic_util.fs import require_output_directory, require_readable_directory
 
-from mpn_dicom_to_bids.pipeline import mpn_dicom_to_bids
+from mni_7t_dicom_to_bids.pipeline import mni_7t_dicom_to_bids
 
 
 def main():
@@ -14,8 +14,8 @@ def main():
     # Parse CLI arguments
 
     parser = argparse.ArgumentParser(
-        prog='mpn_dicom_to_bids',
-        description='Run the MPN DICOM to BIDS script on a DICOM directory',
+        prog='mni_7t_dicom_to_bids',
+        description="Run the MNI 7T DICOM to BIDS converter on a DICOM study",
     )
 
     parser.add_argument('input_dicom_dir_path',
@@ -59,6 +59,16 @@ def main():
     require_readable_directory(args.input_dicom_dir_path)
     require_output_directory(args.output_bids_dir_path)
 
-    mpn_dicom_to_bids(args.input_dicom_dir_path, args.output_bids_dir_path, args.subject, args.session, args.overwrite)
+    mni_7t_dicom_to_bids(
+        args.input_dicom_dir_path,
+        args.output_bids_dir_path,
+        args.subject,
+        args.session,
+        args.overwrite,
+    )
 
     print('Success !')
+
+
+if __name__ == '__main__':
+    main()

@@ -1,13 +1,14 @@
 from bic_util.print import print_error_exit
 from bic_util.util import find
 
-from mpn_dicom_to_bids.dataclass import BidsAcquisitionInfo, BidsAcquisitionSeriesInfo, DicomSeriesInfo
-from mpn_dicom_to_bids.variables import bids_dicom_ignores, bids_dicom_mappings
+from mni_7t_dicom_to_bids.dataclass import BidsAcquisitionInfo, BidsAcquisitionSeriesInfo, DicomSeriesInfo
+from mni_7t_dicom_to_bids.variables import bids_dicom_ignores, bids_dicom_mappings
 
 
 def sort_bids_acquisitions(dicom_series_entries: list[DicomSeriesInfo]) -> list[BidsAcquisitionSeriesInfo]:
     """
-    Sort a set of DICOM series into BIDS acquisitions according to the MPN DICOM to BIDS mapping.
+    Sort a set of DICOM series into BIDS acquisitions according to the MNI 7T DICOM to BIDS
+    converter.
     """
 
     bids_series_entries: list[BidsAcquisitionSeriesInfo] = []
@@ -49,7 +50,7 @@ def sort_bids_acquisitions(dicom_series_entries: list[DicomSeriesInfo]) -> list[
 
 def ignore_dicom_series(dicom_series: DicomSeriesInfo) -> bool:
     """
-    Check if a DICOM series should be ignored as per the MPN DICOM to BIDS conversion parameters.
+    Check if a DICOM series should be ignored as per the MNI 7T DICOM to BIDS converter parameters.
     """
 
     for bids_dicom_ignore in bids_dicom_ignores:
@@ -61,8 +62,8 @@ def ignore_dicom_series(dicom_series: DicomSeriesInfo) -> bool:
 
 def get_bids_acquisition_info(dicom_series: DicomSeriesInfo) -> BidsAcquisitionInfo | None:
     """
-    Return the BIDS parameters of a DICOM series as per the MPN DICOM to BIDS conversion
-    parameters.
+    Return the BIDS parameters of a DICOM series as per the MNI 7T DICOM to BIDS converter
+    conversion parameters.
     """
 
     for bids_scan_type, bids_dicom_mapping in bids_dicom_mappings.items():

@@ -5,12 +5,12 @@ import tempfile
 
 from bic_util.print import print_error_exit
 
-from mpn_dicom_to_bids.dataclass import (
+from mni_7t_dicom_to_bids.dataclass import (
     BidsAcquisitionSeriesInfo,
     BidsDirInfo,
     BidsName,
 )
-from mpn_dicom_to_bids.post_process import post_process
+from mni_7t_dicom_to_bids.post_process import post_process
 
 
 def check_dicom_to_niix():
@@ -22,7 +22,7 @@ def check_dicom_to_niix():
     if shutil.which('dcm2niix') is None:
         print_error_exit(
             "`dcm2niix` does not look installed or accessible on this machine. Please install"
-            " `dcm2niix` before running the MPN DICOM to BIDS converter."
+            " `dcm2niix` before running the MNI 7T DICOM to BIDS converter."
         )
 
 

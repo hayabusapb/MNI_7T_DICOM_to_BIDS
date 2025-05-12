@@ -1,11 +1,11 @@
-from mpn_dicom_to_bids.dataclass import BidsDirInfo
-from mpn_dicom_to_bids.dataset_files import add_dataset_files
-from mpn_dicom_to_bids.run_dicom_to_niix import check_dicom_to_niix, convert_bids_series
-from mpn_dicom_to_bids.sort_bids_acquisitions import sort_bids_acquisitions
-from mpn_dicom_to_bids.sort_dicom_series import sort_dicom_series
+from mni_7t_dicom_to_bids.dataclass import BidsDirInfo
+from mni_7t_dicom_to_bids.dataset_files import add_dataset_files
+from mni_7t_dicom_to_bids.run_dicom_to_niix import check_dicom_to_niix, convert_bids_series
+from mni_7t_dicom_to_bids.sort_bids_acquisitions import sort_bids_acquisitions
+from mni_7t_dicom_to_bids.sort_dicom_series import sort_dicom_series
 
 
-def mpn_dicom_to_bids(
+def mni_7t_dicom_to_bids(
     input_dicom_dir_path: str,
     output_bids_dir_path: str,
     subject: str,
