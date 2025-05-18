@@ -87,7 +87,7 @@ def post_process_file(file_path: str):
 
     # Rename the file on the system.
     if new_file_name != file_name:
-        print(f'Renaming \'{file_name}\' to \'{new_file_name}\'')
+        print(f"Renaming '{file_name}' to '{new_file_name}'.")
         rename_file(file_path, new_file_name)
 
 

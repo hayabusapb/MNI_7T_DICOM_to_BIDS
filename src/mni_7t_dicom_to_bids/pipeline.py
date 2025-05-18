@@ -1,15 +1,27 @@
-from mni_7t_dicom_to_bids.dataclass import BidsDirInfo
+from mni_7t_dicom_to_bids.convert_dicom_series import (
+    check_dicom_to_niix,
+    convert_bids_acquisitions,
+    convert_unknown_dicom_series_list,
+)
+from mni_7t_dicom_to_bids.dataclass import BidsSessionInfo
 from mni_7t_dicom_to_bids.dataset_files import add_dataset_files
-from mni_7t_dicom_to_bids.run_dicom_to_niix import check_dicom_to_niix, convert_bids_series
-from mni_7t_dicom_to_bids.sort_bids_acquisitions import sort_bids_acquisitions
+from mni_7t_dicom_to_bids.map_bids_dicom_series import map_bids_dicom_series
+from mni_7t_dicom_to_bids.print import (
+    print_found_bids_acquisition_mappings,
+    print_found_dicom_series,
+    print_found_unknown_dicom_series,
+)
 from mni_7t_dicom_to_bids.sort_dicom_series import sort_dicom_series
 
 
 def mni_7t_dicom_to_bids(
-    input_dicom_dir_path: str,
-    output_bids_dir_path: str,
+    dicom_study_path: str,
+    bids_dataset_path: str,
     subject: str,
     session: str,
+    ignore_unknown: bool,
+    convert_unknown: str | None,
+    dataset_files: bool,
     overwrite: bool,
 ):
     print("Checking `dcm2niix` availability...")
@@ -18,36 +30,30 @@ def mni_7t_dicom_to_bids(
 
     print("Grouping DICOMs by DICOM series...")
 
-    dicom_series_entries = sort_dicom_series(input_dicom_dir_path)
+    dicom_series_list = sort_dicom_series(dicom_study_path)
 
-    print(f"Found {len(dicom_series_entries)} DICOM series:")
+    print_found_dicom_series(dicom_series_list)
 
-    for dicom_series in dicom_series_entries:
-        print(
-            f"- '{dicom_series.description}\' (series number: {dicom_series.number})'"
-            f" ({len(dicom_series.file_paths)} files)"
-        )
+    bids_acquisition_mappings, unknown_dicom_series = map_bids_dicom_series(
+        dicom_series_list,
+        ignore_unknown or convert_unknown is not None,
+    )
 
-    print("Mapping DICOM series with BIDS labels...")
+    print_found_bids_acquisition_mappings(bids_acquisition_mappings)
 
-    bids_series_entries = sort_bids_acquisitions(dicom_series_entries)
-
-    print(f"Found {len(bids_series_entries)} BIDS acquisitions:")
-
-    for bids_series in bids_series_entries:
-        print(
-            f"- '{bids_series.scan_type}/{bids_series.file_name}'"
-            f" ({len(bids_series.dicom_series)} DICOM series)"
-        )
+    print_found_unknown_dicom_series(unknown_dicom_series, ignore_unknown, convert_unknown)
 
     print('Converting DICOM series to NIfTI...')
 
-    bids_dir = BidsDirInfo(
-        path    = output_bids_dir_path,
+    bids_session = BidsSessionInfo(
         subject = subject,
         session = session,
     )
 
-    convert_bids_series(bids_dir, bids_series_entries)
+    convert_bids_acquisitions(bids_dataset_path, bids_session, bids_acquisition_mappings, overwrite)
 
-    add_dataset_files(bids_dir, input_dicom_dir_path, overwrite)
+    if convert_unknown is not None:
+        convert_unknown_dicom_series_list(unknown_dicom_series, convert_unknown)
+
+    if dataset_files:
+        add_dataset_files(bids_dataset_path, bids_session, dicom_study_path, overwrite)

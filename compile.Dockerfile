@@ -56,5 +56,5 @@ RUN apt-get install -y git
 RUN pip3.11 install --no-cache-dir git+https://github.com/BIC-MNI/BIC_MRI_pipeline_util.git
 RUN pip3.11 install --no-cache-dir .[dev]
 
-# Run PyInstaller, the executable will be created as `/mni_7t_dicom_to_bids/dist/mni_7t_dicom_to_bids`.
-CMD ["pyinstaller", "mni_7t_dicom_to_bids.spec"]
+# Run PyInstaller, the executable will be created as `/mni_7t_dicom_to_bids/dist/mni7t_dcm2bids`.
+CMD ["pyinstaller", "mni7t_dcm2bids.spec"]

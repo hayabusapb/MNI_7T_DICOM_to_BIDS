@@ -1,4 +1,3 @@
-import os
 import re
 from dataclasses import dataclass
 from re import Match, Pattern
@@ -29,14 +28,9 @@ class DicomSeriesInfo:
 
 
 @dataclass
-class BidsDirInfo:
+class BidsSessionInfo:
     """
-    Information about a BIDS directory that contains a single subject and session.
-    """
-
-    path: str
-    """
-    The BIDS directory path.
+    Information about a BIDS session directory.
     """
 
     subject: str
@@ -49,54 +43,11 @@ class BidsDirInfo:
     The BIDS session label.
     """
 
-    subject_dir_path: str
-    """
-    The BIDS subject directory path.
-    """
-
-    session_dir_path: str
-    """
-    The BIDS session directory path.
-    """
-
-    anat_dir_path: str
-    """
-    The BIDS anat directory path.
-    """
-
-    dwi_dir_path: str
-    """
-    The BIDS DWI directory path.
-    """
-
-    fmap_dir_path: str
-    """
-    The BIDS fmap directory path.
-    """
-
-    func_dir_path: str
-    """
-    The BIDS func directory path.
-    """
-
-    def __init__(self, path: str, subject: str, session: str):
-        self.path = path
-        self.subject = subject
-        self.session = session
-
-        self.subject_dir_path = os.path.join(self.path, f'sub-{self.subject}')
-        self.session_dir_path = os.path.join(self.path, f'sub-{self.subject}', f'ses-{self.session}')
-
-        self.anat_dir_path = os.path.join(self.session_dir_path, 'anat')
-        self.dwi_dir_path  = os.path.join(self.session_dir_path, 'dwi')
-        self.fmap_dir_path = os.path.join(self.session_dir_path, 'fmap')
-        self.func_dir_path = os.path.join(self.session_dir_path, 'func')
-
 
 @dataclass
-class BidsAcquisitionSeriesInfo:
+class BidsAcquisitionInfo:
     """
-    Information about a BIDS acquisition and its DICOM series.
+    Information about a BIDS acquisition directory.
     """
 
     scan_type: str
@@ -107,28 +58,23 @@ class BidsAcquisitionSeriesInfo:
     file_name: str
     """
     Base name of the BIDS files of the acquisition.
+    """
+
+
+@dataclass
+class BidsAcquisitionMapping:
+    """
+    Mapping between a BIDS acquisition and its DICOM series.
+    """
+
+    acquisition: BidsAcquisitionInfo
+    """
+    The BIDS acquisition information.
     """
 
     dicom_series: list[DicomSeriesInfo]
     """
     The DICOM series of the acquisition.
-    """
-
-
-@dataclass
-class BidsAcquisitionInfo:
-    """
-    Information about a BIDS acquisition.
-    """
-
-    scan_type: str
-    """
-    Name of the BIDS scan type of the acquisition.
-    """
-
-    file_name: str
-    """
-    Base name of the BIDS files of the acquisition.
     """
 
 

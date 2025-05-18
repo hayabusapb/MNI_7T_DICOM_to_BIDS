@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='mni_7t_dicom_to_bids',
+    name='mni7t_dcm2bids',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

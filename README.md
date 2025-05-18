@@ -44,10 +44,10 @@ pip install .[dev]
 
 ### Configuration
 
-The PyInstaller configuration of the MNI 7T DICOM to BIDS converter is saved in the `mni_7t_dicom_to_bids.spec` file. To regenerate this configuration, use the following command in the project root directory:
+The PyInstaller configuration of the MNI 7T DICOM to BIDS converter is saved in the `mni7t_dcm2bids.spec` file. To regenerate this configuration, use the following command in the project root directory:
 
 ```sh
-pyi-makespec --onefile --name mni_7t_dicom_to_bids --add-data src/mni_7t_dicom_to_bids/assets:mni_7t_dicom_to_bids/assets src/mni_7t_dicom_to_bids/scripts/run_mni_7t_dicom_to_bids.py
+pyi-makespec --onefile --name mni7t_dcm2bids --add-data src/mni_7t_dicom_to_bids/assets:mni_7t_dicom_to_bids/assets src/mni_7t_dicom_to_bids/scripts/run_mni_7t_dicom_to_bids.py
 ```
 
 ### Compilation (local compatibility)
@@ -55,10 +55,10 @@ pyi-makespec --onefile --name mni_7t_dicom_to_bids --add-data src/mni_7t_dicom_t
 To compile the MNI 7T DICOM to BIDS converter, use the following command in the project root directory:
 
 ```sh
-pyinstaller mni_7t_dicom_to_bids.spec
+pyinstaller mni7t_dcm2bids.spec
 ```
 
-This will create a `dist/mni_7t_dicom_to_bids` executable for the MNI 7T DICOM to BIDS converter.
+This will create a `dist/mni7t_dcm2bids` executable for the MNI 7T DICOM to BIDS converter.
 
 ### Compilation (maximum compatibility)
 
@@ -81,7 +81,7 @@ docker run --mount type=bind,src=TARGET_DIRECTORY_PATH,dst=/mni_7t_dicom_to_bids
 You can run the MNI 7T DICOM to BIDS converter using the following command:
 
 ```sh
-mni_7t_dicom_to_bids <input_dicom_dir_path> <output_bids_dir_path> --subject <subject_label> --session <session_label>
+mni7t_dcm2bids <dicom_study_path> <bids_dataset_path> --subject <subject_label> --session <session_label>
 ```
 
 The input DICOM directory must contain the DICOMs of a single session. The output BIDS directory can either be an empty directory (which can be created by the script) or be an existing BIDS directory (in which case the converted session is added to the existing BIDS).
