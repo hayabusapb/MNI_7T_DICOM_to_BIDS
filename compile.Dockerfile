@@ -36,7 +36,7 @@ RUN apt-get -yq install \
 # Install an HTTP client to download Python.
 RUN apt-get install -y wget
 
-# Install Python 3.11
+# Install Python 3.11.
 RUN wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz \
     && tar xzf Python-3.11.9.tgz \
     && cd Python-3.11.9 \
@@ -47,12 +47,14 @@ RUN wget https://www.python.org/ftp/python/3.11.9/Python-3.11.9.tgz \
 
 # Install the MNI 7T DICOM to BIDS converter
 
+# Install Git.
+RUN apt-get install -y git
+
 # Copy the project directory.
 COPY . /mni_7t_dicom_to_bids
 WORKDIR /mni_7t_dicom_to_bids
 
 # Install the package and its other dependencies.
-RUN apt-get install -y git
 RUN pip3.11 install --no-cache-dir git+https://github.com/BIC-MNI/BIC_MRI_pipeline_util.git
 RUN pip3.11 install --no-cache-dir .[dev]
 

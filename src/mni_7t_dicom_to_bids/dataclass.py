@@ -1,11 +1,12 @@
 import re
-from dataclasses import dataclass
+from collections import defaultdict
+from dataclasses import dataclass, field
 from re import Match, Pattern
 
 from mni_7t_dicom_to_bids.variables import bids_label_order
 
 
-@dataclass
+@dataclass(frozen=True, order=True)
 class DicomSeriesInfo:
     """
     Information about a DICOM series and its DICOM files found within a DICOM directory.
@@ -21,13 +22,13 @@ class DicomSeriesInfo:
     The DICOM series number.
     """
 
-    file_paths: list[str]
+    file_paths: list[str] = field(compare=False)
     """
     The paths of the DICOM files of the series.
     """
 
 
-@dataclass
+@dataclass(frozen=True, order=True)
 class BidsSessionInfo:
     """
     Information about a BIDS session directory.
@@ -44,7 +45,7 @@ class BidsSessionInfo:
     """
 
 
-@dataclass
+@dataclass(frozen=True, order=True)
 class BidsAcquisitionInfo:
     """
     Information about a BIDS acquisition directory.
@@ -61,21 +62,57 @@ class BidsAcquisitionInfo:
     """
 
 
+class DicomBidsMapping:
+    """
+    A mapping between a set of DICOM series and their BIDS acquisitions.
+    """
+
+    bids_dicom_series_dict: dict[BidsAcquisitionInfo, list[DicomSeriesInfo]] = defaultdict(list)
+    """
+    A mapping between the BIDS acquisitions and their DICOM series. Note that the BIDS acquisitions
+    are mapped to their DICOM series and not the opposite because all the DICOM series of a BIDS
+    acquisition need to be processed together in the conversion process.
+    """
+
+    ignored_dicom_series_list: list[DicomSeriesInfo] = []
+    """
+    The ignored DICOM series.
+    """
+
+    unknown_dicom_series_list: list[DicomSeriesInfo] = []
+    """
+    The unrecognized DICOM series.
+    """
+
+
 @dataclass
-class BidsAcquisitionMapping:
+class DicomSeriesConversionsCounter:
     """
-    Mapping between a BIDS acquisition and its DICOM series.
-    """
-
-    acquisition: BidsAcquisitionInfo
-    """
-    The BIDS acquisition information.
+    Counters about the DICOM series BIDS conversion process.
     """
 
-    dicom_series: list[DicomSeriesInfo]
+    total: int
     """
-    The DICOM series of the acquisition.
+    The total number of DICOM series to convert to BIDS.
     """
+
+    successes: int = 0
+    """
+    The number of DICOM series that were successfully converted to BIDS.
+    """
+
+    errors: int = 0
+    """
+    The number of DICOM series that were not successfully converted to BIDS.
+    """
+
+    @property
+    def count(self) -> int:
+        """
+        The number of the current DICOM series to convert to BIDS.
+        """
+
+        return self.successes + self.errors + 1
 
 
 @dataclass

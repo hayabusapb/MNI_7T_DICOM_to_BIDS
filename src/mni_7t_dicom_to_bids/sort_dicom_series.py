@@ -39,7 +39,7 @@ def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
             dicom_series = DicomSeriesInfo(
                 description = dicom.SeriesDescription,
                 number      = dicom.SeriesNumber,
-                file_paths         = [],
+                file_paths  = [],
             )
 
             dicom_series_entries.append(dicom_series)
@@ -48,6 +48,6 @@ def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
 
         # TODO: Handle session numbers.
 
-    dicom_series_entries.sort(key=lambda dicom_series: dicom_series.number)
+    dicom_series_entries.sort()
 
     return dicom_series_entries
