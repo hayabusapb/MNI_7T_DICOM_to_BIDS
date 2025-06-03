@@ -36,4 +36,4 @@ preview = true
 
 [tool.ruff.lint]
 ignore = ["E203", "E221", "E241", "E251"]
-select = ["E", "F", "I", "N", "UP", "W"]
+select = ["E", "F", "I", "N", "RUF", "UP", "W"]
