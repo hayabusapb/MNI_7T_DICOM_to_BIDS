@@ -67,19 +67,21 @@ class DicomBidsMapping:
     A mapping between a set of DICOM series and their BIDS acquisitions.
     """
 
-    bids_dicom_series_dict: dict[BidsAcquisitionInfo, list[DicomSeriesInfo]] = defaultdict(list)
+    bids_dicom_series_dict: dict[BidsAcquisitionInfo, list[DicomSeriesInfo]] = field(
+        default_factory=lambda: defaultdict(list)
+    )
     """
     A mapping between the BIDS acquisitions and their DICOM series. Note that the BIDS acquisitions
     are mapped to their DICOM series and not the opposite because all the DICOM series of a BIDS
     acquisition need to be processed together in the conversion process.
     """
 
-    ignored_dicom_series_list: list[DicomSeriesInfo] = []
+    ignored_dicom_series_list: list[DicomSeriesInfo] = field(default_factory=list[DicomSeriesInfo])
     """
     The ignored DICOM series.
     """
 
-    unknown_dicom_series_list: list[DicomSeriesInfo] = []
+    unknown_dicom_series_list: list[DicomSeriesInfo] = field(default_factory=list[DicomSeriesInfo])
     """
     The unrecognized DICOM series.
     """
