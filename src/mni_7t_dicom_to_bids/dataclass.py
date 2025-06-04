@@ -62,6 +62,7 @@ class BidsAcquisitionInfo:
     """
 
 
+@dataclass
 class DicomBidsMapping:
     """
     A mapping between a set of DICOM series and their BIDS acquisitions.
