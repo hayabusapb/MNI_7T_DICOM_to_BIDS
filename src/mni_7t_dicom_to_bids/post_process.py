@@ -42,8 +42,8 @@ def post_process_file(file_path: str):
         bids_name.remove(echo_match.group(0))
         bids_name.add('echo', echo_match.group(1))
 
-    # Remove 'run-?' from echo files.
-    if bids_name.has('echo') and bids_name.has('run'):
+    # Remove 'run-?' from echo files (there can be several 'task-rest' runs per acquisition).
+    if bids_name.has('echo') and bids_name.has('run') and not bids_name.has_value('task', 'rest'):
         bids_name.remove('run')
 
     # Remove 'run-?' from MTR files.

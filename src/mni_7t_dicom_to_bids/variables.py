@@ -8,22 +8,22 @@ bids_dicom_mappings: dict[str, dict[str, list[str] | str]] = {
         # FLAIR
         'FLAIR': 'anat-flair_acq-0p7iso_UPAdia',
         # UNIT1
-        'UNIT1'              : 'anat-T1w_acq-mp2rage_0.7mm_CSptx_UNI_Images',
+        'UNIT1'               : 'anat-T1w_acq-mp2rage_0.7mm_CSptx_UNI_Images',
         'desc-denoised_UNIT1' : 'anat-T1w_acq-mp2rage_0.7mm_CSptx_UNI-DEN',
         # T1
         'T1map' : 'anat-T1w_acq-mp2rage_0.7mm_CSptx_T1_Images',
         'T1w'   : 'anat-T1w_acq_mprage_0.8mm_CSptx',
         # T2
-        'acq-aspire_desc-echoCombined_T2starw' : 'EchoCombined_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         'acq-SWI_T2starw'                      : 'CLEAR-SWI_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
-        'acq-romeo_desc-mask_T2starw'          : 'Romeo_Mask_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         'acq-romeo_T2starw'                    : 'Romeo_P_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
+        'acq-romeo_desc-mask_T2starw'          : 'Romeo_Mask_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         'acq-romeo_desc-unwrapped_T2starw'     : 'Romeo_B0_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         'acq-aspire_T2starw': [
             'Aspire_M_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
             'Aspire_P_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
             'T2star_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         ],
+        'acq-aspire_desc-echoCombined_T2starw' : 'EchoCombined_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         'acq-aspire_desc-echoCombinedSensitivityCorrected_T2starw': [
             'sensitivity_corrected_mag_anat-T2star_acq-me_gre_0.7iso_ASPIRE',
         ],
