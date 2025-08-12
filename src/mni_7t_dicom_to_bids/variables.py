@@ -92,5 +92,22 @@ bids_dicom_ignores: list[str] = [
     'PhoenixZIPReport',
 ]
 
-# The order in which the BIDS labels should appear in a BIDS acquisition name.
-bids_label_order = ['sub', 'ses', 'acq', 'desc', 'task', 'inv', 'run', 'echo', 'mt', 'dir', 'part']
+# The order in which the BIDS entities should appear in a BIDS file name.
+# This order is taken from the BIDS specification entity table:
+# https://bids-specification.readthedocs.io/en/stable/appendices/entity-table.html
+bids_label_order = [
+    'sub',
+    'ses',
+    'task',
+    'acq',
+    'ce',
+    'rec',
+    'inv',
+    'mt',
+    'dir',
+    'run',
+    'echo',
+    'part',
+    'chunk',
+    'desc',  # Note that 'desc' is not in the entity table.
+]
