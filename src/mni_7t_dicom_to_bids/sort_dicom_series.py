@@ -2,8 +2,9 @@ import os
 
 import pydicom
 from bic_util.fs import count_all_dir_files, iter_all_dir_files
-from bic_util.print import get_progress_printer
+from bic_util.print import get_progress_printer, print_error_exit
 from bic_util.util import find
+from pydicom.errors import InvalidDicomError
 
 from mni_7t_dicom_to_bids.dataclass import DicomSeriesInfo
 
@@ -25,20 +26,37 @@ def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
 
         dicom_file_path = os.path.join(dicom_dir_path, dicom_file_rel_path)
 
-        dicom = pydicom.dcmread(dicom_file_path)  # type: ignore
+        try:
+            dicom = pydicom.dcmread(dicom_file_path)  # type: ignore
+        except InvalidDicomError:
+            print_error_exit(f"Could not read file '{dicom_file_path}', this file may not be a DICOM file.")
+
+        try:
+            series_description = dicom.SeriesDescription
+        except AttributeError:
+            print_error_exit(
+                f"Could not read series description of DICOM file '{dicom_file_path}', this file may be incorrect."
+            )
+
+        try:
+            series_number = dicom.SeriesNumber
+        except AttributeError:
+            print_error_exit(
+                f"Could not read series number of DICOM file '{dicom_file_path}', this file may be incorrect."
+            )
 
         dicom_series = find(
             lambda dicom_series: (
-                dicom_series.description == dicom.SeriesDescription
-                and dicom_series.number == dicom.SeriesNumber
+                dicom_series.description == series_description
+                and dicom_series.number == series_number
             ),
             dicom_series_entries,
         )
 
         if dicom_series is None:
             dicom_series = DicomSeriesInfo(
-                description = dicom.SeriesDescription,
-                number      = dicom.SeriesNumber,
+                description = series_description,
+                number      = series_number,
                 file_paths  = [],
             )
 
