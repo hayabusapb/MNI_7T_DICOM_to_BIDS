@@ -21,7 +21,7 @@ pip install .[dev]
 The PyInstaller configuration of the MNI 7T DICOM to BIDS converter is saved in the `mni7t_dcm2bids.spec` file. To regenerate this configuration, use the following command in the project root directory:
 
 ```sh
-pyi-makespec --onefile --name mni7t_dcm2bids --add-data src/mni_7t_dicom_to_bids/assets:mni_7t_dicom_to_bids/assets src/mni_7t_dicom_to_bids/scripts/run_mni_7t_dicom_to_bids.py
+pyi-makespec --onefile --name mni7t_dcm2bids --add-data src/mni_7t_dicom_to_bids/assets:mni_7t_dicom_to_bids/assets src/mni_7t_dicom_to_bids/scripts/run_mni7t_dcm2bids.py
 ```
 
 ## Compilation (local compatibility)

@@ -20,7 +20,7 @@ dev = [
 ]
 
 [project.scripts]
-mni_7t_dicom_to_bids = "mni_7t_dicom_to_bids.scripts.run_mni_7t_dicom_to_bids:main"
+mni7t_dcm2bids = "mni_7t_dicom_to_bids.scripts.run_mni7t_dcm2bids:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/mni_7t_dicom_to_bids"]

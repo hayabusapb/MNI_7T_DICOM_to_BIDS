@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['src/mni_7t_dicom_to_bids/scripts/run_mni_7t_dicom_to_bids.py'],
+    ['src/mni_7t_dicom_to_bids/scripts/run_mni7t_dcm2bids.py'],
     pathex=[],
     binaries=[],
     datas=[('src/mni_7t_dicom_to_bids/assets', 'mni_7t_dicom_to_bids/assets')],
