@@ -3,6 +3,8 @@ import re
 import shutil
 import subprocess
 import tempfile
+import pydicom
+import json
 from collections.abc import Callable
 from shlex import quote
 
@@ -20,6 +22,60 @@ from mni_7t_dicom_to_bids.dataclass import (
 from mni_7t_dicom_to_bids.post_process import post_process
 from mni_7t_dicom_to_bids.print import print_existing_bids_files
 
+## To fetch custom fields in DICOM that dcm2niix is ignoring_APB21Aug25
+def find_string_in_file(filepath, search_string):
+    """
+    Searches for a string in a text file and returns a list of lines
+    containing the string.
+
+    Args:
+        filepath (str): The path to the text file.
+        search_string (str): The string to search for.
+
+    Returns:
+        list: A list of lines (including newline characters) that contain the search_string.
+    """
+    matched_lines = []
+    try:
+        with open(filepath, 'r', encoding='utf-8', errors='ignore') as file:
+            for line in file:
+                if search_string in line:
+                    matched_lines.append(line)
+    except FileNotFoundError:
+        print(f"Error: File not found at {filepath}")
+    return matched_lines
+
+# Add custom fields to JSON_APB21Aug25
+def addfields2json(jsonfile, Patient_Age, Patient_Birth, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle):
+    """
+    Add fields to json for all sequences
+    """
+
+    # Open and load the JSON data
+    try:
+      with open(jsonfile, 'r') as f:
+          data = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+          print(f"Error loading JSON: {e}")
+          data = {}
+
+     # Add a new field
+    data['mtFlip_Angle'] = mtFlip_Angle
+
+     # Add a nested field if 'details' exists and is a dictionary
+   
+    data['Patient_Details'] = {}
+    data['Patient_Details']['Age'] = Patient_Age 
+    data['Patient_Details']['BirthDate'] = Patient_Birth 
+    data['Patient_Details']['Sex'] = Patient_Sex 
+    data['Patient_Details']['Height'] = Patient_Height 
+    data['Patient_Details']['Weight'] = Patient_Weight 
+
+   # Save the modified JSON data back to the file
+    with open(jsonfile, 'w') as f:
+     json.dump(data, f, indent=4)
+
+    print(f"JSON data in '{jsonfile}' updated successfully.")
 
 def check_dicom_to_niix():
     """
@@ -42,11 +98,16 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
     counter = get_conversions_counter(dicom_bids_mapping, args)
 
     for bids_acquisition, dicom_series_list in dicom_bids_mapping.bids_dicom_series_dict.items():
+        
+        # Iterates through runs 
         for run_number, dicom_series in enumerate(dicom_series_list, 1):
             print(
                 f"Processing BIDS acquisition '{bids_acquisition.scan_type}/{bids_acquisition.file_name}'"
                 f" ({counter.count} / {counter.total})."
             )
+
+
+            
 
             if len(dicom_series_list) == 1:
                 run_number = None
@@ -67,7 +128,41 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
                     tmp_output_path,
                 )
             )
-
+            
+            # Here have to retrieve the names of the json files to patch from above_APB21Aug25
+            if 'neuromelaninMTw' in bids_acquisition.file_name:
+             print(f"Neuromelanin MPN Series found in: {bids_acquisition.file_name} and run: {run_number}")
+             # Now here grep directly in the DICOM field for custom # dicom_series should iterate 1st run 104 times,
+             # we can get the parameter we need from the first
+             
+             FLA=find_string_in_file(dicom_series.file_paths[0], 'sWipMemBlock.adFree[2]')
+             mtFlip_Angle=str(re.findall(r'\d+\.\d+', FLA[0])[0])
+            else:
+             mtFlip_Angle='None'   
+             
+            # Patching to retrieve Participant data
+            
+            dataset = pydicom.dcmread(dicom_series.file_paths[0])
+            
+            Patient_Age=str(dataset.PatientAge)
+            Patient_Birth_Date=str(dataset.PatientBirthDate)
+            Patient_Sex=str(dataset.PatientSex)
+            Patient_Height=str(dataset.PatientSize)
+            Patient_Weight=str(dataset.PatientWeight)
+  
+            if run_number != None and 'neuromelaninMTw' in bids_acquisition.file_name:
+              #replace string _T1W by -run-#-T1w
+              bacq=bids_acquisition.file_name.replace("_T1w",f"_run-{run_number}_T1w")                
+              file2patch=os.path.join(bids_data_type_path,"sub-"+bids_session.subject+"_ses-"+bids_session.session+"_"+bacq+".json")
+              print(f"Now patching {file2patch}")
+            else:
+              breakpoint()  
+              file2patch=os.path.join(bids_data_type_path,"sub-"+bids_session.subject+"_ses-"+bids_session.session+"_"+bids_acquisition.file_name+".json")
+              print(f"Now patching {file2patch}")
+              
+            addfields2json(file2patch, Patient_Age, Patient_Birth_Date, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle) 
+             #Patch the json above 
+   
     if isinstance(args.unknowns, ConvertUnknownsArg):
         for unknown_dicom_series in dicom_bids_mapping.unknown_dicom_series_list:
             print(
@@ -198,7 +293,9 @@ def run_conversion_function(
                 # Move the output files to their final directory.
                 for file in os.scandir(tmp_output_dir_path):
                     shutil.move(file.path, output_dir_path)
-
+                    
+                    # Need to return the final paths to be able to patch'em 
+                    return file.path, output_dir_path
             counter.successes += 1
     except Exception as error:
         print_error(str(error))
