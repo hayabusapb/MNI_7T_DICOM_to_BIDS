@@ -55,7 +55,7 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
 
             bids_data_type_path = get_bids_data_type_dir_path(args.bids_dataset_path, bids_session, bids_acquisition)
 
-            run_conversion_function(
+            ML=run_conversion_function(
                 dicom_series,
                 bids_data_type_path,
                 counter,
@@ -67,9 +67,12 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
                     args,
                     tmp_dicom_dir_path,
                     tmp_output_path,
-                )
+                )   
             ) 
-            patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series, run_number)
+            
+            bidsin = [x for x in ML if x[-5:]==".json"]
+            print(f"This is working file {bidsin[0]}") 
+            patchjson(bids_data_type_path,bidsin[0], dicom_series, run_number)
     if isinstance(args.unknowns, ConvertUnknownsArg):
         for unknown_dicom_series in dicom_bids_mapping.unknown_dicom_series_list:
             print(
@@ -85,11 +88,15 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
                     unknown_dicom_series, tmp_dicom_dir_path, tmp_ouput_dir_path, args
                 ),
             )
-            patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series, run_number)
+            #patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series, run_number)
     print(
         f"Processed {counter.total} DICOM series, including {counter.successes} successful conversions to BIDS and"
         f" {counter.errors} errors."
     )
+    
+    #breakpoint()
+    
+    
 
 def get_conversions_counter(dicom_bids_mapping: DicomBidsMapping, args: Args) -> DicomSeriesConversionsCounter:
     """
@@ -119,7 +126,7 @@ def convert_bids_dicom_series(
     tmp_output_dir_path: str,
 ):
     """
-    Convert an unknown DICOM series to NIfTI.
+    Convert a known DICOM series to NIfTI.
     """
 
     file_name = get_bids_acquisition_file_name(bids_session, bids_acquisition.file_name, run_number)
@@ -188,6 +195,7 @@ def run_conversion_function(
     """
 
     try:
+        ML=[]
         with tempfile.TemporaryDirectory() as tmp_dicom_dir_path:
             # Copy the DICOM files of the DICOM series in the temporary input directory.
             for dicom_file_path in dicom_series.file_paths:
@@ -199,7 +207,11 @@ def run_conversion_function(
                 # Move the output files to their final directory.
                 for file in os.scandir(tmp_output_dir_path):
                     shutil.move(file.path, output_dir_path)
+                    #breakpoint()
+                    ML.append(str(file.name))
+                    
 
+            return ML # growing list of paths # WORK IN PROGRESS CALL FILE EXACT NAME AND NO GUESSING 
             counter.successes += 1
     except Exception as error:
         print_error(str(error))
@@ -336,10 +348,12 @@ def addfields2json(jsonfile, Patient_Age, Patient_Birth, Patient_Sex, Patient_He
     print(f"JSON data in '{jsonfile}' updated successfully.")
     
 # Patch-Json
-def patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series, run_number):
-
-    if 'neuromelaninMTw' in bids_acquisition.file_name:
-     print(f"Neuromelanin MPN Series found in: {bids_acquisition.file_name} and run: {run_number}")
+#def patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series, run_number):
+def patchjson(bids_data_type_path,bidsin, dicom_series, run_number):
+    
+    ## SECOND LOOP TO FETCH STUFF
+    if 'neuromelaninMTw' in bidsin:
+     print(f"Neuromelanin MPN Series found in: {bidsin} and run: {run_number}")
      # Now here grep directly in the DICOM field for custom # dicom_series should iterate 1st run 104 times,
      # we can get the parameter we need from the first
      
@@ -348,22 +362,26 @@ def patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series,
     else:
      mtFlip_Angle='None'   
      
-    # Patching to retrieve Participant data    
-    dat1 = pydicom.dcmread(dicom_series.file_paths[0]) 
+    # Patching to retrieve Participant data
+    
+    dat1 = pydicom.dcmread(dicom_series.file_paths[0])
+    
     Patient_Age=str(dat1.PatientAge)
     Patient_Birth_Date=str(dat1.PatientBirthDate)
     Patient_Sex=str(dat1.PatientSex)
     Patient_Height=str(dat1.PatientSize)
     Patient_Weight=str(dat1.PatientWeight)
-
-    if run_number != None and 'neuromelaninMTw' in bids_acquisition.file_name:
-      #replace string _T1W by -run-#-T1w
-      bacq=bids_acquisition.file_name.replace("_T1w",f"_run-{run_number}_T1w")                
-      file2patch=os.path.join(bids_data_type_path,"sub-"+bids_session.subject+"_ses-"+bids_session.session+"_"+bacq+".json")
-      print(f"Now patching {file2patch}")
-    else:
-      #breakpoint()  
-      file2patch=os.path.join(bids_data_type_path,"sub-"+bids_session.subject+"_ses-"+bids_session.session+"_"+bids_acquisition.file_name+".json")
-      print(f"Now patching {file2patch}")
+    
+   
+    
+    # if run_number != None and 'neuromelaninMTw' in bids_acquisition.file_name:
+    #   #replace string _T1W by -run-#-T1w
+    #   bacq=bids_acquisition.file_name.replace("_T1w",f"_run-{run_number}_T1w")                
+    #   file2patch=os.path.join(bids_data_type_path,"sub-"+bids_session.subject+"_ses-"+bids_session.session+"_"+bacq+".json")
+    #   print(f"Now patching {file2patch}")
+    # else:
+    #   #breakpoint()  
+    #   file2patch=os.path.join(bids_data_type_path,"sub-"+bids_session.subject+"_ses-"+bids_session.session+"_"+bids_acquisition.file_name+".json")
+    #   print(f"Now patching {file2patch}")
       
-    addfields2json(file2patch, Patient_Age, Patient_Birth_Date, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle) 
+    addfields2json(os.path.join(bids_data_type_path,bidsin), Patient_Age, Patient_Birth_Date, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle) 
