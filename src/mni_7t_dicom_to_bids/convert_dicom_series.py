@@ -1,4 +1,4 @@
-import os
+ import os
 import re
 import shutil
 import subprocess
@@ -70,9 +70,12 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
                 )   
             ) 
             
-            bidsin = [x for x in ML if x[-5:]==".json"]
-            print(f"This is working file {bidsin[0]}") 
-            patchjson(bids_data_type_path,bidsin[0], dicom_series, run_number)
+            if ML is not None:
+              bidsin = [x for x in ML if x[-5:]==".json"]
+              for fnum in bidsin:
+               print(f"This is working file {fnum}")   
+               patchjson(bids_data_type_path, fnum, dicom_series, run_number)
+                       
     if isinstance(args.unknowns, ConvertUnknownsArg):
         for unknown_dicom_series in dicom_bids_mapping.unknown_dicom_series_list:
             print(
@@ -88,14 +91,17 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
                     unknown_dicom_series, tmp_dicom_dir_path, tmp_ouput_dir_path, args
                 ),
             )
-            #patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series, run_number)
+            bidsin = [x for x in ML if x[-5:]==".json"]
+             
+            if ML is not None:
+              bidsin = [x for x in ML if x[-5:]==".json"]
+              for fnum in bidsin:
+               print(f"This is working file {fnum}")   
+               patchjson(bids_data_type_path, fnum, dicom_series, run_number)
     print(
         f"Processed {counter.total} DICOM series, including {counter.successes} successful conversions to BIDS and"
         f" {counter.errors} errors."
     )
-    
-    #breakpoint()
-    
     
 
 def get_conversions_counter(dicom_bids_mapping: DicomBidsMapping, args: Args) -> DicomSeriesConversionsCounter:
@@ -211,7 +217,7 @@ def run_conversion_function(
                     ML.append(str(file.name))
                     
 
-            return ML # growing list of paths # WORK IN PROGRESS CALL FILE EXACT NAME AND NO GUESSING 
+            return ML # list of json paths to read elsewhere for patching. APB
             counter.successes += 1
     except Exception as error:
         print_error(str(error))
@@ -320,7 +326,6 @@ def addfields2json(jsonfile, Patient_Age, Patient_Birth, Patient_Sex, Patient_He
     """
     Add fields to json for all sequences
     """
-    #breakpoint()
     # Open and load the JSON data
     try:
       with open(jsonfile, 'r') as f:
@@ -351,19 +356,14 @@ def addfields2json(jsonfile, Patient_Age, Patient_Birth, Patient_Sex, Patient_He
 #def patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series, run_number):
 def patchjson(bids_data_type_path,bidsin, dicom_series, run_number):
     
-    ## SECOND LOOP TO FETCH STUFF
     if 'neuromelaninMTw' in bidsin:
      print(f"Neuromelanin MPN Series found in: {bidsin} and run: {run_number}")
-     # Now here grep directly in the DICOM field for custom # dicom_series should iterate 1st run 104 times,
-     # we can get the parameter we need from the first
      
      FLA=find_string_in_file(dicom_series.file_paths[0], 'sWipMemBlock.adFree[2]')
      mtFlip_Angle=str(re.findall(r'\d+\.\d+', FLA[0])[0])
     else:
      mtFlip_Angle='None'   
-     
-    # Patching to retrieve Participant data
-    
+
     dat1 = pydicom.dcmread(dicom_series.file_paths[0])
     
     Patient_Age=str(dat1.PatientAge)
@@ -371,17 +371,5 @@ def patchjson(bids_data_type_path,bidsin, dicom_series, run_number):
     Patient_Sex=str(dat1.PatientSex)
     Patient_Height=str(dat1.PatientSize)
     Patient_Weight=str(dat1.PatientWeight)
-    
-   
-    
-    # if run_number != None and 'neuromelaninMTw' in bids_acquisition.file_name:
-    #   #replace string _T1W by -run-#-T1w
-    #   bacq=bids_acquisition.file_name.replace("_T1w",f"_run-{run_number}_T1w")                
-    #   file2patch=os.path.join(bids_data_type_path,"sub-"+bids_session.subject+"_ses-"+bids_session.session+"_"+bacq+".json")
-    #   print(f"Now patching {file2patch}")
-    # else:
-    #   #breakpoint()  
-    #   file2patch=os.path.join(bids_data_type_path,"sub-"+bids_session.subject+"_ses-"+bids_session.session+"_"+bids_acquisition.file_name+".json")
-    #   print(f"Now patching {file2patch}")
-      
+
     addfields2json(os.path.join(bids_data_type_path,bidsin), Patient_Age, Patient_Birth_Date, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle) 
