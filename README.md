@@ -25,7 +25,7 @@ docker build -t mni_7t_dicom_to_bids -f mni_7t_dicom_to_bids/run.Dockerfile mni_
 ```
 ### Apptainer / Singularity (HPC deployment)
 
-To install the converter with Apptainer, clone the Github repository (APB forked main branch) and build the project using the Apptainer definition file:
+To install the converter with Apptainer, clone the Github repository (APB forked main branch) and build the project using Apptainer recipe file (.def):
 
 ```sh
 git clone https://github.com/hayabusapb/MNI_7T_DICOM_to_BIDS
