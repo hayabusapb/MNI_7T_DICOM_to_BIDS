@@ -31,7 +31,7 @@ To install the converter with Apptainer, clone the Github repository (APB forked
 git clone https://github.com/hayabusapb/MNI_7T_DICOM_to_BIDS
 apptainer build <IMAGE.sig> ./MNI_7T_DICOM_to_BIDS/MPN7T.def
 ```
-The apptainer container is by default rootles and contain all stand alone dependencies to run in HPC. 
+The apptainer container is by default rootless and contain all stand alone dependencies to run in HPC. 
 Its size is 448.5MB, tested as per dist. Apptainer 1.4.1 
 To execute from container do module load apptainer in HPC of choice, then execute as:
 
