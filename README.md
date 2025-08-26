@@ -41,7 +41,7 @@ OUT="<PATH_TO_BIDS>"
 IMG="<PATH_TO_IMAGE.sif>"
 SUB="<SUBJECT_ID>"
 SESSION="<SESSION>"
-apptainer exec --bind ${IN}:/mnt_IN,${OUT}:/mnt_OUT $IMG mni7t_dcm2bids mnt_IN mnt_OUT --subject $SUB --session $SESSION
+apptainer exec --bind ${IN}:/mnt_IN,${OUT}:/mnt_OUT $IMG mni7t_dcm2bids /mnt_IN /mnt_OUT --subject $SUB --session $SESSION
 ```
 
 ## Execution
