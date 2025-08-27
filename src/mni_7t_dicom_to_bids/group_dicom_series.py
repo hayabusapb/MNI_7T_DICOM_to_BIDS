@@ -9,11 +9,13 @@ from pydicom.errors import InvalidDicomError
 from mni_7t_dicom_to_bids.dataclass import DicomSeriesInfo
 
 
-def sort_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
+def group_dicom_series(dicom_dir_path: str) -> list[DicomSeriesInfo]:
     """
-    Read a DICOM directory and sort all the DICOM files according to their series description and
+    Read a DICOM directory and group all the DICOM files according to their series description and
     series number.
     """
+
+    print("Grouping DICOMs by DICOM series...")
 
     files_count = count_all_dir_files(dicom_dir_path)
 

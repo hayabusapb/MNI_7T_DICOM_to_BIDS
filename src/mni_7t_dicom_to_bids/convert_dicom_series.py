@@ -27,6 +27,8 @@ def check_dicom_to_niix():
     not the case.
     """
 
+    print("Checking `dcm2niix` availability...")
+
     if shutil.which('dcm2niix') is None:
         print_error_exit(
             "`dcm2niix` does not look installed or accessible on this machine. Please install"
@@ -38,6 +40,8 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
     """
     Convert the mapped BIDS acquisitions and DICOM series to NIfTI.
     """
+
+    print('Converting DICOM series to NIfTI...')
 
     counter = get_conversions_counter(dicom_bids_mapping, args)
 

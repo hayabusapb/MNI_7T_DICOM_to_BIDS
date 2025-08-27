@@ -2,6 +2,7 @@ from mni_7t_dicom_to_bids.args import Args
 from mni_7t_dicom_to_bids.convert_dicom_series import check_dicom_to_niix, convert_dicom_series
 from mni_7t_dicom_to_bids.dataclass import BidsSessionInfo
 from mni_7t_dicom_to_bids.dataset_files import add_dataset_files
+from mni_7t_dicom_to_bids.group_dicom_series import group_dicom_series
 from mni_7t_dicom_to_bids.map_dicom_series import map_bids_dicom_series
 from mni_7t_dicom_to_bids.print import (
     print_found_dicom_series,
@@ -9,17 +10,12 @@ from mni_7t_dicom_to_bids.print import (
     print_found_mapped_bids_acquisitions,
     print_found_unknown_dicom_series,
 )
-from mni_7t_dicom_to_bids.sort_dicom_series import sort_dicom_series
 
 
 def mni_7t_dicom_to_bids(args: Args):
-    print("Checking `dcm2niix` availability...")
-
     check_dicom_to_niix()
 
-    print("Grouping DICOMs by DICOM series...")
-
-    dicom_series_list = sort_dicom_series(args.dicom_study_path)
+    dicom_series_list = group_dicom_series(args.dicom_study_path)
 
     print_found_dicom_series(dicom_series_list)
 
@@ -30,8 +26,6 @@ def mni_7t_dicom_to_bids(args: Args):
     print_found_ignored_dicom_series(dicom_bids_mapping)
 
     print_found_unknown_dicom_series(dicom_bids_mapping, args.unknowns)
-
-    print('Converting DICOM series to NIfTI...')
 
     bids_session = BidsSessionInfo(
         subject = args.subject,
