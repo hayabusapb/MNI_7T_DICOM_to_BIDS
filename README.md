@@ -43,6 +43,8 @@ SUB="<SUBJECT_ID>"
 SESSION="<SESSION>"
 apptainer exec --bind ${IN}:/mnt_IN,${OUT}:/mnt_OUT $IMG mni7t_dcm2bids /mnt_IN /mnt_OUT --subject $SUB --session $SESSION
 ```
+Alternatively a frozen image can be obtained here:
+https://zenodo.org/records/17072935
 
 ## Execution
 
