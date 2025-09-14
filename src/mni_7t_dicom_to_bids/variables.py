@@ -49,14 +49,32 @@ bids_dicom_mappings: dict[str, dict[str, list[str] | str]] = {
     },
     'dwi': {
         # B0
-        'acq-b0_dir-PA_sbref' : 'dwi_acq_b0_PA_SBRef',
-        'acq-b0_dir-PA_dwi'   : 'dwi_acq_b0_PA',
+        'acq-b0_dir-PA_sbref': [
+            'dwi_acq_b0_PA_SBRef',
+            'dwi_acq_b0_PA_SBRef_Pha',
+        ],
+        'acq-b0_dir-PA_dwi': [
+            'dwi_acq_b0_PA',
+            'dwi_acq_b0_PA_Pha',
+        ],
         # SBREF
-        'acq-multib38_dir-AP_sbref': 'dwi_acq_multib_38dir_AP_acc9_SBRef',
-        'acq-multib70_dir-AP_sbref': 'dwi_acq_multib_70dir_AP_acc9_SBRef',
+        'acq-multib38_dir-AP_sbref': [
+            'dwi_acq_multib_38dir_AP_acc9_SBRef',
+            'dwi_acq_multib_38dir_AP_acc9_SBRef_Pha',
+        ],
+        'acq-multib70_dir-AP_sbref': [
+            'dwi_acq_multib_70dir_AP_acc9_SBRef',
+            'dwi_acq_multib_70dir_AP_acc9_SBRef_Pha',
+        ],
         # DWI
-        'acq-multib38_dir-AP_dwi': 'dwi_acq_multib_38dir_AP_acc9',
-        'acq-multib70_dir-AP_dwi': 'dwi_acq_multib_70dir_AP_acc9',
+        'acq-multib38_dir-AP_dwi': [
+            'dwi_acq_multib_38dir_AP_acc9',
+            'dwi_acq_multib_38dir_AP_acc9_Pha',
+        ],
+        'acq-multib70_dir-AP_dwi': [
+            'dwi_acq_multib_70dir_AP_acc9',
+            'dwi_acq_multib_70dir_AP_acc9_Pha',
+        ],
     },
     'fmap': {
         # TB1TFL
