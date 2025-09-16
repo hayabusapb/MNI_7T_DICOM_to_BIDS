@@ -7,15 +7,7 @@ bids_dicom_mappings: dict[str, dict[str, list[str] | str]] = {
         # UNIT1
         'UNIT1'               : ['anat-T1w_acq-mp2rage_0.7mm_CSptx_UNI_Images','*anat-T1w_acq-mp2rage_07mm_CSptx_UNI_Images'],
         'desc-denoised_UNIT1' : ['anat-T1w_acq-mp2rage_0.7mm_CSptx_UNI-DEN','*anat-T1w_acq-mp2rage_07mm_CSptx_UNI-DEN'],
-        
-         
-        # CSTFL - Compressed sensing turboflash
-        'acq-cstfl_inv-1_MP2RAGE': '*cstfl-mp2rage-05mm_INV1',
-        'acq-cstfl_inv-2_MP2RAGE': '*cstfl-mp2rage-05mm_INV2',
-        'acq-cstfl_T1map': '*cstfl-mp2rage-05mm_T1_Images',
-        'acq-cstfl_UNIT1': '*cstfl-mp2rage-05mm_UNI_Images',
-        'acq-cstflDenoised_UNIT1': '*cstfl-mp2rage-05mm_UNI-DEN',
-      
+
       
         # T1
         'T1map' : ['anat-T1w_acq-mp2rage_0.7mm_CSptx_T1_Images','*anat-T1w_acq-mp2rage_07mm_CSptx_T1_Images'],
@@ -48,7 +40,13 @@ bids_dicom_mappings: dict[str, dict[str, list[str] | str]] = {
         'acq-05mm_inv-2_MP2RAGE': ['anat-T1w_acq-mp2rage_05mm_UP_INV2','*anat-T1w_acq-mp2rage_05mm_UP*_INV2'],
         'acq-05mm_T1map': '*anat-T1w_acq-mp2rage_05mm_UP*_T1_Images',
         'acq-05mm_UNIT1': '*anat-T1w_acq-mp2rage_05mm_UP*_UNI_Images',
-
+               
+        # High-resolution MP2RAGE - CSTFL - Compressed sensing turboflash
+        'acq-cstfl_inv-1_MP2RAGE': '*cstfl-mp2rage-05mm_INV1',
+        'acq-cstfl_inv-2_MP2RAGE': '*cstfl-mp2rage-05mm_INV2',
+        'acq-cstfl_T1map': '*cstfl-mp2rage-05mm_T1_Images',
+        'acq-cstfl_UNIT1': '*cstfl-mp2rage-05mm_UNI_Images',
+        'acq-cstflDenoised_UNIT1': '*cstfl-mp2rage-05mm_UNI-DEN',
 
         # MTW
         'acq-mtw_T1w'        : '*anat-mtw_acq-T1w_07mm',
