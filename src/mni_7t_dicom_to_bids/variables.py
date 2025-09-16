@@ -1,4 +1,11 @@
-# MNI (MPN,MICA,JBL 7T Series) DICTIONARY
+# MNI DICOM2BIDS DICTIONARY   
+# Mapping DICOM series to BIDS information.
+# The first key if the BIDS data type name.
+# The second key is the BIDS acquisition name.
+# The value is a DICOM series description or a list of DICOM series descriptions
+# for that BIDS data type and acquisition.
+# Current series: MPN,MICA-lab,JBL.
+
 bids_dicom_mappings: dict[str, dict[str, list[str] | str]] = {
     'anat': { 
          # FLAIR
