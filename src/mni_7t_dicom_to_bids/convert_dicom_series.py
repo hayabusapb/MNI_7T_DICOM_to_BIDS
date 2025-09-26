@@ -91,7 +91,6 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
                     unknown_dicom_series, tmp_dicom_dir_path, tmp_ouput_dir_path, args
                 ),
             )
-            bidsin = [x for x in ML if x[-5:]==".json"]
              
             if ML is not None:
               bidsin = [x for x in ML if x[-5:]==".json"]
@@ -216,9 +215,9 @@ def run_conversion_function(
                     #breakpoint()
                     ML.append(str(file.name))
                     
-
-            return ML # list of json paths to read elsewhere for patching. APB
             counter.successes += 1
+            return ML # list of json paths to read elsewhere for patching. APB
+            
     except Exception as error:
         print_error(str(error))
         counter.errors += 1
@@ -231,12 +230,13 @@ def run_dicom_to_niix(dicom_dir_path: str, output_dir_path: str, file_name: str,
 
     command = [
         'dcm2niix',
-        '-z', 'y', '-b', 'y',
+        '-z', 'y', '-b', 'y', 
         '-o', output_dir_path,
         '-f', file_name,
         dicom_dir_path,
     ]
-
+            
+   #command = ['dcm2niix','-b','y','-ba','y','z','y','f', file_name, '-o', output_dir_path, dicom_dir_path] #Jonahs settings
     print(f"Running dcm2niix with command: '{' '.join(command)}'.")
 
     process = with_print_subscript(lambda: subprocess.run(command))
