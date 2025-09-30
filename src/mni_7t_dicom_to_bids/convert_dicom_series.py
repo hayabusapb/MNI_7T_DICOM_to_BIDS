@@ -17,7 +17,7 @@ from mni_7t_dicom_to_bids.dataclass import (
     DicomSeriesConversionsCounter,
     DicomSeriesInfo,
 )
-from mni_7t_dicom_to_bids.post_process import post_process
+from mni_7t_dicom_to_bids.patch_files import patch_files
 from mni_7t_dicom_to_bids.print import print_existing_bids_files
 
 
@@ -129,7 +129,7 @@ def convert_bids_dicom_series(
 
     run_dicom_to_niix(tmp_dicom_dir_path, tmp_output_dir_path, file_name, args)
 
-    post_process(tmp_output_dir_path)
+    patch_files(tmp_output_dir_path)
 
     # Check if the files already exist in the target directory.
 

@@ -8,17 +8,24 @@ from bic_util.fs import rename_file
 from mni_7t_dicom_to_bids.dataclass import BidsName
 
 
-def post_process(acquisition_path: str):
-    for file_name in os.scandir(acquisition_path):
-        file_path = os.path.join(acquisition_path, file_name)
-        post_process_file(file_path)
-
-    post_process_json(acquisition_path)
-
-
-def post_process_file(file_path: str):
+def patch_files(acquisition_dir_path: str):
     """
-    Apply MNI 7T BIDS post processing.
+    Patch the output BIDS files with the following:
+    - Rename files to match the MNI 7T BIDS naming.
+    - Delete superfluous files.
+    - Add missing information to the JSON sidecar file.
+    """
+
+    for file_name in os.scandir(acquisition_dir_path):
+        file_path = os.path.join(acquisition_dir_path, file_name)
+        patch_file_path(file_path)
+
+    patch_json(acquisition_dir_path)
+
+
+def patch_file_path(file_path: str):
+    """
+    Rename an output BIDS file to match the MNI 7T BIDS naming, or delete it if it is superfluous.
     """
 
     file_name = os.path.basename(file_path)
@@ -91,7 +98,7 @@ def post_process_file(file_path: str):
         rename_file(file_path, new_file_name)
 
 
-def post_process_json(acquisition_path: str):
+def patch_json(acquisition_path: str):
     """
     Patch the generated BIDS JSON sidercar files with additional information.
     """
