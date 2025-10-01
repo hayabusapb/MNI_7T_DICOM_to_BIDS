@@ -1,14 +1,13 @@
-import json
 import math
-import os
 from pathlib import Path
 
 from bic_util.fs import rename_file
+from bic_util.json import update_json
 
 from mni_7t_dicom_to_bids.dataclass import BidsName
 
 
-def patch_files(acquisition_dir_path: str):
+def patch_files(acquisition_dir_path: Path):
     """
     Patch the output BIDS files with the following:
     - Rename files to match the MNI 7T BIDS naming.
@@ -16,31 +15,29 @@ def patch_files(acquisition_dir_path: str):
     - Add missing information to the JSON sidecar file.
     """
 
-    for file_name in os.scandir(acquisition_dir_path):
-        file_path = os.path.join(acquisition_dir_path, file_name)
+    for file_path in acquisition_dir_path.iterdir():
         patch_file_path(file_path)
 
     patch_json(acquisition_dir_path)
 
 
-def patch_file_path(file_path: str):
+def patch_file_path(file_path: Path):
     """
     Rename an output BIDS file to match the MNI 7T BIDS naming, or delete it if it is superfluous.
     """
 
-    file_name = os.path.basename(file_path)
-    bids_name = BidsName.from_string(file_name)
+    bids_name = BidsName.from_string(file_path.name)
 
     # Delete the bval and bvec files from MP2RAGE acquisitions.
     if bids_name.has('MP2RAGE') and (bids_name.extension == 'bval' or bids_name.extension == 'bvec'):
-        print(f"Remove MP2RAGE bval/bvec file '{file_name}'")
-        os.remove(file_path)
+        print(f"Remove MP2RAGE bval/bvec file '{file_path.name}'")
+        file_path.unlink()
         return
 
     # Delete the 'ROI1' files.
     if bids_name.has('ROI1'):
-        print(f"Remove ROI file '{file_name}'")
-        os.remove(file_path)
+        print(f"Remove ROI file '{file_path.name}'")
+        file_path.unlink()
         return
 
     # Replace 'e?' by 'echo-?'
@@ -93,43 +90,30 @@ def patch_file_path(file_path: str):
     new_file_name = str(bids_name)
 
     # Rename the file on the system.
-    if new_file_name != file_name:
-        print(f"Renaming '{file_name}' to '{new_file_name}'.")
+    if new_file_name != file_path.name:
+        print(f"Renaming '{file_path.name}' to '{new_file_name}'.")
         rename_file(file_path, new_file_name)
 
 
-def patch_json(acquisition_path: str):
+def patch_json(acquisition_path: Path):
     """
     Patch the generated BIDS JSON sidercar files with additional information.
     """
 
     # Add 'Units' to 'part-phase' scans.
-    phase_paths = Path(acquisition_path).rglob('*part-phase*.json')
-    for phase_path in phase_paths:
-        with open(phase_path) as phase_file:
-            data = json.load(phase_file)
-
-        data['Units'] = 'rad'
-
-        with open(phase_path, 'w') as phase_file:
-            json.dump(data, phase_file, indent=4)
+    for json_path in acquisition_path.rglob('*part-phase*.json'):
+        update_json(json_path, {
+            'Units': 'rad',
+        })
 
     # Add 'MTState' to 'mt-off' scans.
-    for mt_off_path in Path(acquisition_path).rglob('*mt-off*.json'):
-        with open(mt_off_path) as mt_off_file:
-            data = json.load(mt_off_file)
-
-        data['MTState'] = False
-
-        with open(mt_off_path, 'w') as mt_off_file:
-            json.dump(data, mt_off_file, indent=4)
+    for json_path in acquisition_path.rglob('*mt-off*.json'):
+        update_json(json_path, {
+            'MTState': False
+        })
 
     # Add 'MTState' to 'mt-on' scans.
-    for mt_on_path in Path(acquisition_path).rglob('*mt-on*.json'):
-        with open(mt_on_path) as mt_on_file:
-            data = json.load(mt_on_file)
-
-        data['MTState'] = True
-
-        with open(mt_on_path, 'w') as mt_on_file:
-            json.dump(data, mt_on_file, indent=4)
+    for json_path in acquisition_path.rglob('*mt-on*.json'):
+        update_json(json_path, {
+            'MTState': True,
+        })

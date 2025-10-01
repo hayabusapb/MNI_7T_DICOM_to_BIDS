@@ -4,6 +4,7 @@ import shutil
 import subprocess
 import tempfile
 from collections.abc import Callable
+from pathlib import Path
 from shlex import quote
 
 from bic_util.print import print_error, print_error_exit, print_warning, with_print_subscript
@@ -129,7 +130,7 @@ def convert_bids_dicom_series(
 
     run_dicom_to_niix(tmp_dicom_dir_path, tmp_output_dir_path, file_name, args)
 
-    patch_files(tmp_output_dir_path)
+    patch_files(Path(tmp_output_dir_path))
 
     # Check if the files already exist in the target directory.
 
