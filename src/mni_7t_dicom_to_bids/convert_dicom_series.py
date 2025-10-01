@@ -54,7 +54,8 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
                 run_number = None
 
             bids_data_type_path = get_bids_data_type_dir_path(args.bids_dataset_path, bids_session, bids_acquisition)
-
+            
+# this section returns a variable for def patchjson line 357--> removing unnecessary json field patch entries commnted
             ML=run_conversion_function(
                 dicom_series,
                 bids_data_type_path,
@@ -321,8 +322,9 @@ def find_string_in_file(filepath, search_string):
         print(f"Error: File not found at {filepath}")
     return matched_lines
 
-# Add custom fields to JSON
-def addfields2json(jsonfile, Patient_Age, Patient_Birth, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle):
+# Add custom fields to JSON # Modified as per only flip angle 
+def addfields2json(jsonfile, mtFlip_Angle):
+#def addfields2json(jsonfile, Patient_Age, Patient_Birth, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle):
     """
     Add fields to json for all sequences
     """
@@ -339,12 +341,12 @@ def addfields2json(jsonfile, Patient_Age, Patient_Birth, Patient_Sex, Patient_He
 
      # Add a nested field if 'details' exists and is a dictionary
    
-    data['Patient_Details'] = {}
-    data['Patient_Details']['Age'] = Patient_Age 
-    data['Patient_Details']['BirthDate'] = Patient_Birth 
-    data['Patient_Details']['Sex'] = Patient_Sex 
-    data['Patient_Details']['Height'] = Patient_Height 
-    data['Patient_Details']['Weight'] = Patient_Weight 
+    #data['Patient_Details'] = {}
+    #data['Patient_Details']['Age'] = Patient_Age 
+    #data['Patient_Details']['BirthDate'] = Patient_Birth 
+    #data['Patient_Details']['Sex'] = Patient_Sex 
+    #data['Patient_Details']['Height'] = Patient_Height 
+    #data['Patient_Details']['Weight'] = Patient_Weight 
 
    # Save the modified JSON data back to the file
     with open(jsonfile, 'w') as f:
@@ -364,12 +366,14 @@ def patchjson(bids_data_type_path,bidsin, dicom_series, run_number):
     else:
      mtFlip_Angle='None'   
 
-    dat1 = pydicom.dcmread(dicom_series.file_paths[0])
-    
-    Patient_Age=str(dat1.PatientAge)
-    Patient_Birth_Date=str(dat1.PatientBirthDate)
-    Patient_Sex=str(dat1.PatientSex)
-    Patient_Height=str(dat1.PatientSize)
-    Patient_Weight=str(dat1.PatientWeight)
+    ## APB removed identifier fields as discussed 30sep with Naj
+    #dat1 = pydicom.dcmread(dicom_series.file_paths[0])
+    #Patient_Age=str(dat1.PatientAge)
+    #Patient_Birth_Date=str(dat1.PatientBirthDate)
+    #Patient_Sex=str(dat1.PatientSex)
+    #Patient_Height=str(dat1.PatientSize)
+    #Patient_Weight=str(dat1.PatientWeight)
 
-    addfields2json(os.path.join(bids_data_type_path,bidsin), Patient_Age, Patient_Birth_Date, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle) 
+    #addfields2json(os.path.join(bids_data_type_path,bidsin), Patient_Age, Patient_Birth_Date, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle) 
+
+    addfields2json(os.path.join(bids_data_type_path,bidsin), mtFlip_Angle) 
