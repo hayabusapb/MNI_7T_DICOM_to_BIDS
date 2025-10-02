@@ -235,7 +235,6 @@ def run_dicom_to_niix(dicom_dir_path: str, output_dir_path: str, file_name: str,
         dicom_dir_path,
     ]
             
-   #command = ['dcm2niix','-b','y','-ba','y','z','y','f', file_name, '-o', output_dir_path, dicom_dir_path] #Jonahs settings
     print(f"Running dcm2niix with command: '{' '.join(command)}'.")
 
     process = with_print_subscript(lambda: subprocess.run(command))
@@ -333,19 +332,7 @@ def addfields2json(jsonfile, mtFlip_Angle):
     except (FileNotFoundError, json.JSONDecodeError) as e:
           print(f"Error loading JSON: {e}")
           data = {}
-
-     # Add a new field
     data['mtFlip_Angle'] = mtFlip_Angle
-
-     # Add a nested field if 'details' exists and is a dictionary
-   
-    #data['Patient_Details'] = {}
-    #data['Patient_Details']['Age'] = Patient_Age 
-    #data['Patient_Details']['BirthDate'] = Patient_Birth 
-    #data['Patient_Details']['Sex'] = Patient_Sex 
-    #data['Patient_Details']['Height'] = Patient_Height 
-    #data['Patient_Details']['Weight'] = Patient_Weight 
-
    # Save the modified JSON data back to the file
     with open(jsonfile, 'w') as f:
      json.dump(data, f, indent=4)
@@ -353,7 +340,6 @@ def addfields2json(jsonfile, mtFlip_Angle):
     print(f"JSON data in '{jsonfile}' updated successfully.")
     
 # Patch-Json
-#def patchjson(bids_data_type_path, bids_acquisition, bids_session, dicom_series, run_number):
 def patchjson(bids_data_type_path,bidsin, dicom_series, run_number):
     
     if 'neuromelaninMTw' in bidsin:
@@ -363,15 +349,4 @@ def patchjson(bids_data_type_path,bidsin, dicom_series, run_number):
      mtFlip_Angle=str(re.findall(r'\d+\.\d+', FLA[0])[0])
     else:
      mtFlip_Angle='None'   
-
-    ## APB removed identifier fields as discussed 30sep with Naj
-    #dat1 = pydicom.dcmread(dicom_series.file_paths[0])
-    #Patient_Age=str(dat1.PatientAge)
-    #Patient_Birth_Date=str(dat1.PatientBirthDate)
-    #Patient_Sex=str(dat1.PatientSex)
-    #Patient_Height=str(dat1.PatientSize)
-    #Patient_Weight=str(dat1.PatientWeight)
-
-    #addfields2json(os.path.join(bids_data_type_path,bidsin), Patient_Age, Patient_Birth_Date, Patient_Sex, Patient_Height, Patient_Weight, mtFlip_Angle) 
-
-    addfields2json(os.path.join(bids_data_type_path,bidsin), mtFlip_Angle) 
+addfields2json(os.path.join(bids_data_type_path,bidsin), mtFlip_Angle) 
