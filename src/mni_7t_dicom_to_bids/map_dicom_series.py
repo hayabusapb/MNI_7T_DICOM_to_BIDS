@@ -51,8 +51,6 @@ def get_bids_acquisition_info(dicom_series: DicomSeriesInfo) -> BidsAcquisitionI
                 bids_dicom_series_descriptions = [bids_dicom_series_descriptions]
 
             for bids_dicom_series_description in bids_dicom_series_descriptions:
-                #if dicom_series.description == bids_dicom_series_description:
-                # replaced by below
                 if fnmatch.fnmatch(dicom_series.description,bids_dicom_series_description):    
                     return BidsAcquisitionInfo(
                         scan_type = bids_scan_type,
