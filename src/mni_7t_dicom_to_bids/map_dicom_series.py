@@ -1,6 +1,6 @@
 from mni_7t_dicom_to_bids.dataclass import BidsAcquisitionInfo, DicomBidsMapping, DicomSeriesInfo
 from mni_7t_dicom_to_bids.variables import bids_dicom_ignores, bids_dicom_mappings
-import fnmatch # wildcard support line 54 onwards. Alexandre PB
+import fnmatch 
 
 def map_bids_dicom_series(dicom_series_list: list[DicomSeriesInfo]) -> DicomBidsMapping:
     """
