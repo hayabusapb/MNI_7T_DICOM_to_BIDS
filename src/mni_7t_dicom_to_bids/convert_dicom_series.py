@@ -53,9 +53,7 @@ def convert_dicom_series(bids_session: BidsSessionInfo, dicom_bids_mapping: Dico
             if len(dicom_series_list) == 1:
                 run_number = None
 
-            bids_data_type_path = get_bids_data_type_dir_path(args.bids_dataset_path, bids_session, bids_acquisition)
-            
-# this section returns a variable for def patchjson line 357--> removing unnecessary json field patch entries commnted
+            bids_data_type_path = get_bids_data_type_dir_path(args.bids_dataset_path, bids_session, bids_acquisition)            
             ML=run_conversion_function(
                 dicom_series,
                 bids_data_type_path,
