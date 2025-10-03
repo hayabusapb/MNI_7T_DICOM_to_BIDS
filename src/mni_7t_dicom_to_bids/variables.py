@@ -1,7 +1,4 @@
-
-# MNI (MPN,MICA,JBL 7T Series) DICTIONARY
-=======
-# MNI DICOM2BIDS DICTIONARY   
+# MNI (MPN,MICA,JBL 7T Series) DICOM2BIDS DICTIONARY  
 # Mapping DICOM series to BIDS information.
 # The first key if the BIDS data type name.
 # The second key is the BIDS acquisition name.
